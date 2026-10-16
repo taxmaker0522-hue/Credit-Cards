@@ -57,5 +57,10 @@ insert into public.gateways (name, url, sort) values
   ('PaySwitch', 'https://payswitch.example.com/login', 1),
   ('GreenPay',  'https://greenpay.example.com/login', 2);
 
+-- users created BEFORE this script ran have no profile yet: add them
+insert into public.profiles (id, email)
+select id, email from auth.users
+on conflict do nothing;
+
 -- AFTER creating your own user (Authentication > Users > Add user), make it the admin:
 -- update public.profiles set role = 'admin' where email = 'your-email@example.com';
